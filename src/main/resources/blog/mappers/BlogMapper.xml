@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="blog.dao.BlogDao">
+	<resultMap type="blog.entity.Blog" id="BlogResultMap">
+		<result property="id" column="id"/>
+		<result property="title" column="title"/>
+		<result property="releaseDate" column="releaseDate"/>
+		<result property="replyNumber" column="replyNumber"/>
+		<result property="content" column="content"/>
+		<association property="blogType" column="typeId" select="blog.dao.BlogTypeDao.findTypeById"></association>
+	</resultMap>
+	<select id="selectAllBlog" parameterType="blog.entity.Blog" resultMap="BlogResultMap">
+	select * from blog
+	</select>
+	
+	<select id="findById" parameterType="Integer" resultMap="BlogResultMap">
+	select * from blog where id=#{id}
+	</select>
+	
+	<insert id="addBlog" useGeneratedKeys="true" keyProperty="id" parameterType="blog.entity.Blog">
+	insert into blog(title,releaseDate,content,typeId) values(#{title},#{releaseDate},#{content},#{blogType.id})
+	</insert>
+	
+	<update id="updateBlog" parameterType="blog.entity.Blog">
+    	 update blog set title=#{title},content=#{content},typeId=#{blogType.id} where id=#{id} 
+    </update>
+    
+	<delete id="deleteBlog" parameterType="Integer">
+    	delete from blog where id=#{id}
+    </delete>
+    
+    <select id="getBlogByTypeId" parameterType="Integer" resultType="Integer">
+		select count(*) from blog where typeId=#{typeId}
+	</select>
+	
+	 <select id="BlogByType" parameterType="Integer" resultMap="BlogResultMap">
+		select * from blog where typeId=#{typeId}
+	</select>
+</mapper> 

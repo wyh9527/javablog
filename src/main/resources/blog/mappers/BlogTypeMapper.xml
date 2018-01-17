@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="blog.dao.BlogTypeDao">
+	<resultMap type="BlogType" id="BlogTypeResult">
+		<result property="id" column="id"/>
+		<result property="typeName" column="typeName"/>
+		<result property="blogCount" column="blogCount"/>
+	</resultMap>
+	<insert id="add" parameterType="blog.entity.BlogType" >
+	insert into blogtype (typeName) values (#{typeName})
+	</insert>
+	<select id="blogtypelist" parameterType="blog.entity.BlogType" resultMap="BlogTypeResult">
+	select * from blogtype
+	</select>
+	<select id="findTypeById" parameterType="Integer" resultMap="BlogTypeResult">
+		select * from blogtype where id=#{id}
+		</select>
+	<select id="countList" resultMap="BlogTypeResult">
+	select t2.id,t2.typeName,COUNT(t1.id) AS blogCount from blog t1 RIGHT JOIN blogtype t2 ON t1.typeId=t2.id GROUP BY t2.typeName;
+	</select>
+	
+	<delete id="deleteBlogType" parameterType="Integer">
+    	delete from blogtype where id=#{id}
+    </delete>
+</mapper> 
